@@ -1,0 +1,9 @@
+@echo off
+echo Restoring packages...
+dotnet restore
+
+echo Building solution...
+dotnet build --no-restore
+
+echo Running application...
+dotnet run --project src/UI/VaultRedirector.UI.csproj -- %*
