@@ -1,26 +1,32 @@
 # Vault-Redirector
 Automated File Redirector & Compression Engine for Windows
 
-**Current Status: Phase 1 (MVP) - Core Mover Logic**
+**Current Status: Phase 3 Complete (Scanning & Config)**
 
-This utility allows you to move a folder from a source location (e.g., SSD) to a target location (e.g., HDD) and automatically replaces the source with a Directory Junction. This makes the operating system and applications believe the files are still in the original location, while they physically reside on the target drive.
+This utility allows you to move a folder from a source location (e.g., SSD) to a target location (e.g., HDD) and automatically replaces the source with a Directory Junction.
 
 ## Features (Implemented)
 - **Robust Redirection:** safely moves folders and creates junctions.
-- **Cross-Volume Support:** Works across different drives (SSD to HDD).
-- **Interactive Mode:** Prompts for paths if not provided via command line.
-- **Logging:** Detailed crash and operation logs (`crash_log.txt`, `debug_engine.log`).
+- **Auto-Scan:** Detects common junk folders (Windows Temp, Chrome Cache, Spotify) and suggests redirection rules.
+- **Watcher Mode:** Monitors parent folders and automatically redirects target folders upon creation.
+- **Configurable:** Saves rules to `rules.json`.
+- **Interactive Console UI:** Wizard-style menu for adding rules and scanning.
 
 ## Roadmap
 - [x] Phase 1: The "Junction" Logic (MVP)
-- [ ] Phase 2: The "Sentinel" (Real-time File Watcher for Temp/Cache folders)
-- [ ] Phase 3: The Rule Engine (Configuration for specific apps)
-- [ ] Phase 4: System Tray UI & Dashboard
+- [x] Phase 2: The "Sentinel" (Real-time File Watcher)
+- [x] Phase 3: The Rule Engine & Scanner
+- [ ] Phase 4: Native GUI (WPF/WinUI) & System Tray
 
 ## How to Run
 1. Ensure you have the .NET 8 Runtime installed.
-2. Run `build_and_run.bat` to build and start the application.
-3. If no arguments are passed, follow the on-screen prompts to enter Source and Target paths.
+2. Run `build_and_run.bat`.
+3. Choose an option from the menu:
+    - **1. Manual Redirect:** Move a folder once.
+    - **2. Add Rule:** Create a custom rule.
+    - **3. Run Watcher Mode:** Start monitoring based on saved rules.
+    - **4. Scan for Junk Folders:** Automatically detect and add common junk folders.
 
 ## Development
 - Run `run_tests.bat` to execute the test suite.
+- **WPF GUI Note:** A native GUI requires a Windows environment to build. The current Console UI serves as a fully functional dashboard.

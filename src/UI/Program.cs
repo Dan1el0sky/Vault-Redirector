@@ -15,10 +15,18 @@ namespace VaultRedirector.UI
 
             try
             {
-                if (args.Length >= 1 && args[0].Equals("add", StringComparison.OrdinalIgnoreCase))
+                if (args.Length >= 1)
                 {
-                    ConfigCLI.AddRule(configPath);
-                    return;
+                    if (args[0].Equals("add", StringComparison.OrdinalIgnoreCase))
+                    {
+                        ConfigCLI.AddRule(configPath);
+                        return;
+                    }
+                    if (args[0].Equals("scan", StringComparison.OrdinalIgnoreCase))
+                    {
+                        ScannerCLI.RunScan(configPath);
+                        return;
+                    }
                 }
 
                 string? source = null;
@@ -31,15 +39,22 @@ namespace VaultRedirector.UI
                 }
                 else
                 {
+                    Console.WriteLine("Vault Redirector - Command Center");
+                    Console.WriteLine("---------------------------------");
                     Console.WriteLine("No arguments provided.");
                     Console.WriteLine("Commands:");
                     Console.WriteLine("  add               - Add a new redirect rule via wizard.");
+                    Console.WriteLine("  scan              - Scan for junk folders and auto-create rules.");
                     Console.WriteLine("  [source] [target] - Manually redirect a folder once.");
                     Console.WriteLine("  run-service       - Start the watcher service (Simulated in CLI for now).");
                     Console.WriteLine();
-                    Console.WriteLine("Running in interactive mode...");
+                    Console.WriteLine("Interactive Mode:");
 
-                    Console.Write("Enter '1' to Redirect Folder, '2' to Add Rule, '3' to Run Watcher: ");
+                    Console.WriteLine("1. Manual Redirect (Enter paths)");
+                    Console.WriteLine("2. Add Rule (Wizard)");
+                    Console.WriteLine("3. Run Watcher Mode");
+                    Console.WriteLine("4. Scan for Junk Folders");
+                    Console.Write("Enter choice: ");
                     var choice = Console.ReadLine();
 
                     if (choice == "2")
@@ -50,6 +65,11 @@ namespace VaultRedirector.UI
                     else if (choice == "3")
                     {
                         RunWatcherMode(configPath);
+                        return;
+                    }
+                    else if (choice == "4")
+                    {
+                        ScannerCLI.RunScan(configPath);
                         return;
                     }
 
@@ -112,7 +132,7 @@ namespace VaultRedirector.UI
 
             if (rules.Count == 0)
             {
-                Console.WriteLine("No rules found. Add rules first using 'add' command.");
+                Console.WriteLine("No rules found. Run 'scan' or 'add' first.");
                 return;
             }
 
