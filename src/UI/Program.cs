@@ -12,15 +12,39 @@ namespace VaultRedirector.UI
             string logFile = "crash_log.txt";
             try
             {
-                if (args.Length < 2)
+                string? source = null;
+                string? target = null;
+
+                if (args.Length >= 2)
                 {
-                    Console.WriteLine("Usage: VaultRedirector.UI <source_path> <target_path>");
-                    Console.WriteLine("Example: VaultRedirector.UI \"C:\\Users\\Me\\AppData\\Local\\Temp\" \"D:\\Vault\\Temp\"");
-                    return;
+                    source = args[0];
+                    target = args[1];
+                }
+                else
+                {
+                    Console.WriteLine("No arguments provided. Running in interactive mode.");
+                    Console.Write("Please enter the Source path (folder to move): ");
+                    source = Console.ReadLine();
+                    while (string.IsNullOrWhiteSpace(source))
+                    {
+                        Console.WriteLine("Source path cannot be empty. Please enter Source path:");
+                        source = Console.ReadLine();
+                    }
+
+                    Console.Write("Please enter the Target path (destination on Vault drive): ");
+                    target = Console.ReadLine();
+                    while (string.IsNullOrWhiteSpace(target))
+                    {
+                         Console.WriteLine("Target path cannot be empty. Please enter Target path:");
+                         target = Console.ReadLine();
+                    }
                 }
 
-                string source = args[0];
-                string target = args[1];
+                // Ensure non-null for logic (loops above ensure this, but compiler needs help or explicit check)
+                if (source == null || target == null)
+                {
+                     throw new InvalidOperationException("Source or Target path is null.");
+                }
 
                 Log($"Starting redirection process. Source: {source}, Target: {target}", logFile);
 
@@ -53,12 +77,9 @@ namespace VaultRedirector.UI
             {
                 string logEntry = $"[{DateTime.Now}] {message}\n";
                 File.AppendAllText(logFile, logEntry);
-                // Also write to console for immediate visibility
-                // Console.WriteLine(message); // Already doing this in Main for specific messages
             }
             catch
             {
-                // If logging fails, just print to console
                 Console.WriteLine($"[Logging Failed]: {message}");
             }
         }
