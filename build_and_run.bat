@@ -1,16 +1,18 @@
 @echo off
-echo Restoring packages...
-dotnet restore
+echo =================================
+echo Vault Redirector GUI Launcher
+echo =================================
 
-echo Building solution...
-dotnet build --no-restore
+cd vault-redirector-gui
 
-echo Running application...
-dotnet run --project src/UI/VaultRedirector.UI.csproj -- %*
+if not exist "node_modules" (
+    echo Installing dependencies...
+    call npm install
+)
+
+echo Starting application...
+call npm start
 
 echo.
-echo =================================
 echo Application finished.
-echo If it crashed, please check 'crash_log.txt' and 'debug_engine.log'.
-echo =================================
 pause
