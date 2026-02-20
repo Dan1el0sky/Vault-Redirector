@@ -10,10 +10,14 @@ namespace VaultRedirector.Tests
         public HashSet<string> Directories { get; } = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
         public Dictionary<string, string> Junctions { get; } = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
 
-        private string Normalize(string path)
+        // Make Normalize public so tests can use it to assert against internal state correctly
+        public string Normalize(string path)
         {
             if (string.IsNullOrEmpty(path)) return path;
-            return path.Replace(Path.AltDirectorySeparatorChar, Path.DirectorySeparatorChar).TrimEnd(Path.DirectorySeparatorChar);
+            // Normalize separators
+            var normalized = path.Replace(Path.AltDirectorySeparatorChar, Path.DirectorySeparatorChar);
+            // Trim trailing separators unless it's a root drive (e.g., "C:\")
+            return normalized.Length > 3 ? normalized.TrimEnd(Path.DirectorySeparatorChar) : normalized;
         }
 
         public bool DirectoryExists(string path)

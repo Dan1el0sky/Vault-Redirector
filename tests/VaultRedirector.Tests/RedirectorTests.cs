@@ -12,9 +12,8 @@ namespace VaultRedirector.Tests
         {
             // Arrange
             var mockFs = new MockFileSystem();
-            // Use forward slashes for cross-platform test compatibility (running on Linux)
-            var source = "C:/Users/Test/AppData/Local/Temp";
-            var target = "D:/Vault/Temp";
+            var source = Path.Combine("C:", "Users", "Test", "AppData", "Local", "Temp");
+            var target = Path.Combine("D:", "Vault", "Temp");
 
             mockFs.CreateDirectory(source); // Ensure source exists
 
@@ -24,10 +23,13 @@ namespace VaultRedirector.Tests
             redirector.RedirectFolder(source, target);
 
             // Assert
+            var normalizedSource = mockFs.Normalize(source);
+            var normalizedTarget = mockFs.Normalize(target);
+
             Assert.True(mockFs.DirectoryExists(source), "Source path should still exist (as a junction)");
             Assert.True(mockFs.DirectoryExists(target), "Target directory should exist");
-            Assert.True(mockFs.Junctions.ContainsKey(source), "Junction should be created at source");
-            Assert.Equal(target, mockFs.Junctions[source]); // Verify junction target
+            Assert.True(mockFs.Junctions.ContainsKey(normalizedSource), $"Junction should be created at source. Keys: {string.Join(", ", mockFs.Junctions.Keys)}");
+            Assert.Equal(normalizedTarget, mockFs.Junctions[normalizedSource]); // Verify junction target
         }
 
         [Fact]
@@ -35,8 +37,8 @@ namespace VaultRedirector.Tests
         {
             // Arrange
             var mockFs = new MockFileSystem();
-            var source = "C:/NonExistent";
-            var target = "D:/Vault/Target";
+            var source = Path.Combine("C:", "NonExistent");
+            var target = Path.Combine("D:", "Vault", "Target");
             var redirector = new Redirector(mockFs);
 
             // Act & Assert
@@ -49,8 +51,8 @@ namespace VaultRedirector.Tests
         {
             // Arrange
             var mockFs = new MockFileSystem();
-            var source = "C:/Source";
-            var target = "D:/Vault/Target";
+            var source = Path.Combine("C:", "Source");
+            var target = Path.Combine("D:", "Vault", "Target");
 
             mockFs.CreateDirectory(source);
             mockFs.CreateDirectory(target); // Target already exists
@@ -67,8 +69,8 @@ namespace VaultRedirector.Tests
         {
              // Arrange
             var mockFs = new MockFileSystem();
-            var source = "C:/Source";
-            var target = "D:/Vault/Target";
+            var source = Path.Combine("C:", "Source");
+            var target = Path.Combine("D:", "Vault", "Target");
             // Parent D:/Vault does not exist
 
             mockFs.CreateDirectory(source);
@@ -79,7 +81,7 @@ namespace VaultRedirector.Tests
             redirector.RedirectFolder(source, target);
 
             // Assert
-            Assert.True(mockFs.DirectoryExists("D:/Vault"), "Parent directory should be created");
+            Assert.True(mockFs.DirectoryExists(Path.Combine("D:", "Vault")), "Parent directory should be created");
             Assert.True(mockFs.DirectoryExists(target), "Target directory should exist");
         }
     }
