@@ -1,32 +1,35 @@
 # Vault-Redirector
 Automated File Redirector & Compression Engine for Windows
 
-**Current Status: Phase 3 Complete (Scanning & Config)**
+**Current Status: Phase 4 (GUI - Electron)**
 
-This utility allows you to move a folder from a source location (e.g., SSD) to a target location (e.g., HDD) and automatically replaces the source with a Directory Junction.
+This project now includes a modern **Electron + React GUI** for managing file redirections.
 
-## Features (Implemented)
-- **Robust Redirection:** safely moves folders and creates junctions.
-- **Auto-Scan:** Detects common junk folders (Windows Temp, Chrome Cache, Spotify) and suggests redirection rules.
-- **Watcher Mode:** Monitors parent folders and automatically redirects target folders upon creation.
-- **Configurable:** Saves rules to `rules.json`.
-- **Interactive Console UI:** Wizard-style menu for adding rules and scanning.
+## Features
+- **Modern Dashboard:** View active rules and system status.
+- **Auto-Scan:** One-click scan for common junk folders (Temp, Chrome, Spotify).
+- **Manual Redirect:** Easily move and link folders.
+- **System Tray:** Runs in the background (Windows/Linux).
+- **Cross-Platform Core:** Logic written in Node.js (fs-extra, chokidar).
 
-## Roadmap
-- [x] Phase 1: The "Junction" Logic (MVP)
-- [x] Phase 2: The "Sentinel" (Real-time File Watcher)
-- [x] Phase 3: The Rule Engine & Scanner
-- [ ] Phase 4: Native GUI (WPF/WinUI) & System Tray
+## How to Run (Development)
+1. Navigate to `vault-redirector-gui`.
+2. Install dependencies:
+   ```bash
+   npm install
+   ```
+3. Run the application:
+   ```bash
+   npm start
+   ```
+   *Note: In development mode, `main.js` expects the React dev server to be running on port 5173. You may need to run `npm run dev` in a separate terminal.*
 
-## How to Run
-1. Ensure you have the .NET 8 Runtime installed.
-2. Run `build_and_run.bat`.
-3. Choose an option from the menu:
-    - **1. Manual Redirect:** Move a folder once.
-    - **2. Add Rule:** Create a custom rule.
-    - **3. Run Watcher Mode:** Start monitoring based on saved rules.
-    - **4. Scan for Junk Folders:** Automatically detect and add common junk folders.
-
-## Development
-- Run `run_tests.bat` to execute the test suite.
-- **WPF GUI Note:** A native GUI requires a Windows environment to build. The current Console UI serves as a fully functional dashboard.
+## How to Build (Production)
+1. Build the React app:
+   ```bash
+   npm run build
+   ```
+2. Start Electron (it will load the built files from `dist/`):
+   ```bash
+   npm start
+   ```
