@@ -1,6 +1,6 @@
-import { app, BrowserWindow, ipcMain, Tray, Menu } from 'electron';
-import * as path from 'path';
-import * as fs from 'fs-extra';
+const { app, BrowserWindow, ipcMain, Tray, Menu } = require('electron');
+const path = require('path');
+const fs = require('fs-extra');
 // Use require for compatibility with JS files
 const { Redirector } = require('./src/core/Redirector');
 const { WatcherManager } = require('./src/core/WatcherManager');
